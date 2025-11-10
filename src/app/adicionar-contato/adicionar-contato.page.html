@@ -10,4 +10,26 @@
       <ion-title size="large">adicionar-contato</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-list style="padding: 16px">
+    <ion-item>
+      <ion-label position="stacked">Usuário (nome)</ion-label>
+      <ion-input [value]="nome" readonly></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Email</ion-label>
+      <ion-input [value]="email" readonly></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Celular</ion-label>
+      <ion-input
+        [(ngModel)]="celular"
+        placeholder="(00) 9 9999-9999"
+      ></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="adicionar()" style="margin-top: 16px">Adicionar contato</ion-button>
+    <ion-button expand="block" color="medium" (click)="pickRandomUser()" style="margin-top:8px">Sortear usuário da API</ion-button>
+  </ion-list>
 </ion-content>

@@ -10,7 +10,44 @@
       <ion-title size="large">listar-contatos</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-list>
-    <app-contato-item *ngFor="let user of users" [contato]="user"></app-contato-item>
-  </ion-list>
+  <div style="padding: 16px">
+    <div *ngIf="contacts?.length; else empty">
+      <ion-list>
+        <div *ngFor="let c of contacts">
+          <div *ngIf="editingId !== c.id; else editTpl">
+            <ion-item>
+              <ion-label>
+                <h2>{{ c.name }}</h2>
+                <p>{{ c.email }}</p>
+                <p><strong>Celular:</strong> {{ c.phone }}</p>
+              </ion-label>
+            </ion-item>
+            <ion-button expand="block" color="primary" (click)="startEdit(c)">Editar</ion-button>
+            <ion-button expand="block" color="danger" (click)="deleteContact(c.id)" style="margin-top:8px">Excluir</ion-button>
+            <hr />
+          </div>
+          <ng-template #editTpl>
+            <ion-item>
+              <ion-label position="stacked">Nome</ion-label>
+              <ion-input [(ngModel)]="editModel.name"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Email</ion-label>
+              <ion-input [(ngModel)]="editModel.email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Celular</ion-label>
+              <ion-input [(ngModel)]="editModel.phone"></ion-input>
+            </ion-item>
+            <ion-button expand="block" color="success" (click)="saveEdit()">Salvar</ion-button>
+            <ion-button expand="block" color="medium" (click)="cancelEdit()" style="margin-top:8px">Cancelar</ion-button>
+            <hr />
+          </ng-template>
+        </div>
+      </ion-list>
+    </div>
+    <ng-template #empty>
+      <p>Nenhum contato salvo ainda.</p>
+    </ng-template>
+  </div>
 </ion-content>

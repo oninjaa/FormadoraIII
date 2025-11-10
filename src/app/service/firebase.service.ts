@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getDatabase, ref, push, onValue, set } from 'firebase/database';
+import { getDatabase, ref, push, onValue, set, remove } from 'firebase/database';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -17,6 +17,16 @@ export class FirebaseService {
     const contatosRef = ref(this.db, 'contatos');
     const newRef = push(contatosRef);
     return set(newRef, contato);
+  }
+
+  updateContato(id: string, contato: any): Promise<void> {
+    const contatoRef = ref(this.db, `contatos/${id}`);
+    return set(contatoRef, contato);
+  }
+
+  deleteContato(id: string): Promise<void> {
+    const contatoRef = ref(this.db, `contatos/${id}`);
+    return remove(contatoRef);
   }
 
   listContatos(): Observable<any[]> {
