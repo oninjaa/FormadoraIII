@@ -9,7 +9,7 @@ import { FirebaseService } from '../service/firebase.service';
   templateUrl: './listar-contatos.page.html',
   styleUrls: ['./listar-contatos.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonInput, CommonModule, FormsModule]
 })
 export class ListarContatosPage implements OnInit {
   contacts: any[] = [];
@@ -27,7 +27,9 @@ export class ListarContatosPage implements OnInit {
 
   startEdit(contact: any) {
     this.editingId = contact.id;
-    this.editModel = { ...contact };
+    // format phone for editing (show mask) while keeping original digits for save
+    const digits = (contact.phone || '').toString().replace(/\D/g, '').slice(0, 11);
+    this.editModel = { ...contact, phone: this.applyPhoneMask(digits) };
   }
 
   async saveEdit() {
@@ -36,12 +38,40 @@ export class ListarContatosPage implements OnInit {
     const data = { ...this.editModel };
     delete data.id;
     try {
+      // ensure phone saved as digits only
+      if (data.phone) {
+        data.phone = data.phone.toString().replace(/\D/g, '').slice(0, 11);
+      }
       await this.fb.updateContato(id, data);
       this.editingId = null;
       this.editModel = {};
     } catch (err) {
       console.error('Erro ao atualizar contato', err);
     }
+  }
+
+  private applyPhoneMask(digits: string) {
+    if (!digits) return '';
+    const len = digits.length;
+    if (len <= 2) {
+      return `(${digits}`;
+    }
+    if (len <= 6) {
+      const area = digits.slice(0, 2);
+      const part = digits.slice(2);
+      return `(${area}) ${part}`;
+    }
+    if (len <= 10) {
+      const area = digits.slice(0, 2);
+      const part1 = digits.slice(2, 6);
+      const part2 = digits.slice(6);
+      return `(${area}) ${part1}-${part2}`;
+    }
+    const area = digits.slice(0, 2);
+    const first = digits.slice(2, 3);
+    const part1 = digits.slice(3, 7);
+    const part2 = digits.slice(7);
+    return `(${area}) ${first} ${part1}-${part2}`;
   }
 
   cancelEdit() {

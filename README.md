@@ -15,3 +15,5 @@ Tecnologias utilizadas
 - HttpClient (Angular)
 
 Este repositório contém um projeto Ionic básico com páginas para listar e adicionar contatos, um serviço para consumir uma API pública e um serviço para integração com o Firebase Realtime Database.
+
+Versão Final

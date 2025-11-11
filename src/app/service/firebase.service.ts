@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getDatabase, ref, push, onValue, set, remove } from 'firebase/database';
+import { getDatabase, ref, push, onValue, set, remove, get, query, orderByChild, equalTo } from 'firebase/database';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -11,6 +11,20 @@ export class FirebaseService {
   constructor() {
     const app = !getApps().length ? initializeApp(environment as any) : getApp();
     this.db = getDatabase(app);
+  }
+
+  async existsPhone(phoneDigits: string): Promise<boolean> {
+    if (!phoneDigits) return false;
+    const contatosRef = ref(this.db, 'contatos');
+    try {
+      const snap = await get(contatosRef);
+      const val = snap.val();
+      if (!val) return false;
+      return Object.values(val).some((c: any) => (c?.phone || '').toString().replace(/\D/g, '') === phoneDigits);
+    } catch (err) {
+      console.error('Erro ao verificar telefone existente', err);
+      return false;
+    }
   }
 
   addContato(contato: any): Promise<void> {
