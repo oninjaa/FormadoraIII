@@ -38,7 +38,7 @@
             "styles": ["src/global.scss", "src/theme/variables.scss"],
             "scripts": [],
             "browser": "src/main.ts",
-            "externalDependencies": [
+            "allowedCommonJsDependencies": [
               "@ionic/core",
               "@stencil/core"
             ]
@@ -87,7 +87,7 @@
               "buildTarget": "app:build:development"
             },
             "ci": {
-              "progress": false
+              "buildTarget": "app:build:production"
             }
           },
           "defaultConfiguration": "development"
@@ -118,7 +118,6 @@
           },
           "configurations": {
             "ci": {
-              "progress": false,
               "watch": false
             }
           }

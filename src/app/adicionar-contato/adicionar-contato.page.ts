@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonItem, IonLabel, IonList } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonItem, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent } from '@ionic/angular/standalone';
 import { FirebaseService } from '../service/firebase.service';
 import { ToastController } from '@ionic/angular';
 import { ApiService } from '../service/api.service';
+import { addIcons } from 'ionicons';
+import { shuffleOutline, personOutline, mailOutline, callOutline, checkmarkCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-adicionar-contato',
   templateUrl: './adicionar-contato.page.html',
   styleUrls: ['./adicionar-contato.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonButton, IonItem, IonLabel, IonList]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonInput, IonButton, IonItem, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent]
 })
 export class AdicionarContatoPage implements OnInit {
   nome: string = '';
@@ -20,7 +22,9 @@ export class AdicionarContatoPage implements OnInit {
   apiUsers: any[] = [];
   selectedUser: any | null = null;
 
-  constructor(private fb: FirebaseService, private api: ApiService, private toastCtrl: ToastController) {}
+  constructor(private fb: FirebaseService, private api: ApiService, private toastCtrl: ToastController) {
+    addIcons({ shuffleOutline, personOutline, mailOutline, callOutline, checkmarkCircleOutline });
+  }
 
   ngOnInit() {
     this.api.getUsers().subscribe({

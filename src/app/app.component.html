@@ -1,15 +1,12 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
-
-  <!-- Footer com botões Ion para navegação (troca de ion-tabs para evitar problemas de sobreposição) -->
   <ion-tabs>
     <ion-tab-bar slot="bottom">
-      <ion-tab-button routerLink="/adicionar-contato">
+      <ion-tab-button tab="adicionar-contato">
         <ion-icon name="add-circle-outline"></ion-icon>
         Adicionar
       </ion-tab-button>
-      <ion-tab-button routerLink="/listar-contatos">
-        <ion-icon name="menu-outline"></ion-icon>
+      <ion-tab-button tab="listar-contatos">
+        <ion-icon name="list-outline"></ion-icon>
         Listar
       </ion-tab-button>
     </ion-tab-bar>

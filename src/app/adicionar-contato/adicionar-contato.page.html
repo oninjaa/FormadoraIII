@@ -1,48 +1,75 @@
-<ion-header [translucent]="true"> </ion-header>
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Novo Contato</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">adicionar-contato</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-list style="padding: 16px">
-    <ion-item>
-      <ion-label position="stacked">Usuário (nome)</ion-label>
-      <ion-input [value]="nome" readonly></ion-input>
-    </ion-item>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações do Contato</ion-card-title>
+      <ion-card-subtitle>Preencha os dados abaixo</ion-card-subtitle>
+    </ion-card-header>
 
-    <ion-item>
-      <ion-label position="stacked">Email</ion-label>
-      <ion-input [value]="email" readonly></ion-input>
-    </ion-item>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+        <ion-input 
+          label="Nome" 
+          labelPlacement="floating"
+          [value]="nome" 
+          readonly
+          placeholder="Clique no botão abaixo para sortear"
+        ></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Celular</ion-label>
-      <ion-input
-        [(ngModel)]="celular"
-        (ionInput)="onPhoneInput($event)"
-        (keydown)="onPhoneKeyDown($event)"
-        inputmode="numeric"
-        type="tel"
-        maxlength="15"
-        placeholder="(00) 9 9999-9999"
-      ></ion-input>
-    </ion-item>
+      <ion-item lines="none">
+        <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+        <ion-input 
+          label="Email" 
+          labelPlacement="floating"
+          [value]="email" 
+          readonly
+          placeholder="Email do usuário"
+          type="email"
+        ></ion-input>
+      </ion-item>
 
-    <ion-button
-      type="button"
-      expand="block"
-      (click)="adicionar()"
-      style="margin-top: 16px"
-      >Adicionar contato</ion-button
-    >
-    <ion-button
-      type="button"
-      expand="block"
-      (click)="pickRandomUser()"
-      style="margin-top: 8px"
-      >Sortear usuário da API</ion-button
-    >
-  </ion-list>
+      <ion-item lines="none">
+        <ion-icon name="call-outline" slot="start" color="primary"></ion-icon>
+        <ion-input
+          label="Celular *" 
+          labelPlacement="floating"
+          [(ngModel)]="celular"
+          (ionInput)="onPhoneInput($event)"
+          (keydown)="onPhoneKeyDown($event)"
+          inputmode="numeric"
+          type="tel"
+          maxlength="15"
+          placeholder="(00) 0 0000-0000"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        color="secondary"
+        (click)="pickRandomUser()"
+        class="ion-margin-top"
+      >
+        <ion-icon name="shuffle-outline" slot="start"></ion-icon>
+        Sortear Usuário
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        color="success"
+        (click)="adicionar()"
+        [disabled]="!celular"
+        class="ion-margin-top"
+      >
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Salvar Contato
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

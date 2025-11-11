@@ -1,76 +1,122 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>listar-contatos</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Meus Contatos</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-  </ion-header>
-  <div style="padding: 16px">
-    <div *ngIf="contacts?.length; else empty">
-      <ion-list>
-        <div *ngFor="let c of contacts">
-          <div *ngIf="editingId !== c.id; else editTpl">
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="contacts?.length; else empty">
+    <div *ngFor="let c of contacts" class="contact-wrapper">
+      <ion-card *ngIf="editingId !== c.id; else editTpl">
+        <ion-card-header>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <ion-avatar style="width: 50px; height: 50px">
+              <div class="avatar-text">{{ getInitials(c.name) }}</div>
+            </ion-avatar>
+            <div style="flex: 1">
+              <ion-card-title>{{ c.name }}</ion-card-title>
+              <ion-card-subtitle>Contato</ion-card-subtitle>
+            </div>
+          </div>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list lines="none">
             <ion-item>
+              <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
               <ion-label>
-                <h2>{{ c.name }}</h2>
-                <p>{{ c.email }}</p>
-                <p><strong>Celular:</strong> {{ c.phone }}</p>
+                <p>Email</p>
+                <h3>{{ c.email }}</h3>
               </ion-label>
             </ion-item>
-            <ion-button
-              type="button"
-              expand="block"
-              color="primary"
-              (click)="startEdit(c)"
-              >Editar</ion-button
-            >
-            <ion-button
-              type="button"
-              expand="block"
-              color="danger"
-              (click)="deleteContact(c.id)"
-              style="margin-top: 8px"
-              >Excluir</ion-button
-            >
-            <hr />
+            <ion-item>
+              <ion-icon name="call-outline" slot="start" color="primary"></ion-icon>
+              <ion-label>
+                <p>Celular</p>
+                <h3>{{ formatPhone(c.phone) }}</h3>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <div style="display: flex; gap: 8px; margin-top: 12px">
+            <ion-button expand="block" size="default" color="primary" (click)="startEdit(c)">
+              <ion-icon name="create-outline" slot="start"></ion-icon>
+              Editar
+            </ion-button>
+            <ion-button expand="block" size="default" color="danger" (click)="deleteContact(c.id)">
+              <ion-icon name="trash-outline" slot="start"></ion-icon>
+              Excluir
+            </ion-button>
           </div>
-          <ng-template #editTpl>
-            <ion-item>
-              <ion-label position="stacked">Nome</ion-label>
-              <ion-input [(ngModel)]="editModel.name"></ion-input>
+        </ion-card-content>
+      </ion-card>
+
+      <ng-template #editTpl>
+        <ion-card color="light">
+          <ion-card-header>
+            <ion-card-title>Editando Contato</ion-card-title>
+            <ion-card-subtitle>Altere os dados abaixo</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+              <ion-input 
+                label="Nome" 
+                labelPlacement="floating"
+                [(ngModel)]="editModel.name"
+              ></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="stacked">Email</ion-label>
-              <ion-input [(ngModel)]="editModel.email"></ion-input>
+
+            <ion-item lines="none">
+              <ion-icon name="mail-outline" slot="start" color="primary"></ion-icon>
+              <ion-input 
+                label="Email" 
+                labelPlacement="floating"
+                [(ngModel)]="editModel.email" 
+                type="email"
+              ></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="stacked">Celular</ion-label>
-              <ion-input [(ngModel)]="editModel.phone"></ion-input>
+
+            <ion-item lines="none">
+              <ion-icon name="call-outline" slot="start" color="primary"></ion-icon>
+              <ion-input 
+                label="Celular" 
+                labelPlacement="floating"
+                [(ngModel)]="editModel.phone"
+                (ionInput)="onPhoneInput($event)"
+                (keydown)="onPhoneKeyDown($event)"
+                inputmode="numeric"
+                type="tel"
+                maxlength="15"
+              ></ion-input>
             </ion-item>
-            <ion-button
-              type="button"
-              expand="block"
-              color="success"
-              (click)="saveEdit()"
-              >Salvar</ion-button
-            >
-            <ion-button
-              type="button"
-              expand="block"
-              color="medium"
-              (click)="cancelEdit()"
-              style="margin-top: 8px"
-              >Cancelar</ion-button
-            >
-            <hr />
-          </ng-template>
-        </div>
-      </ion-list>
+
+            <div style="display: flex; gap: 8px; margin-top: 16px">
+              <ion-button expand="block" color="success" (click)="saveEdit()">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Salvar
+              </ion-button>
+              <ion-button expand="block" color="medium" (click)="cancelEdit()">
+                <ion-icon name="close-outline" slot="start"></ion-icon>
+                Cancelar
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ng-template>
     </div>
-    <ng-template #empty>
-      <p>Nenhum contato salvo ainda.</p>
-    </ng-template>
   </div>
+
+  <ng-template #empty>
+    <ion-card>
+      <ion-card-content style="text-align: center; padding: 40px">
+        <ion-icon name="people-outline" style="font-size: 80px; color: var(--ion-color-medium)"></ion-icon>
+        <h2 style="margin-top: 16px">Nenhum contato ainda</h2>
+        <p style="color: var(--ion-color-medium)">
+          Adicione seu primeiro contato clicando na aba "Adicionar"
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 </ion-content>

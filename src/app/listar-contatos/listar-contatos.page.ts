@@ -1,22 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonInput } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonInput, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonAvatar } from '@ionic/angular/standalone';
 import { FirebaseService } from '../service/firebase.service';
+import { addIcons } from 'ionicons';
+import { mailOutline, callOutline, createOutline, trashOutline, checkmarkOutline, closeOutline, personOutline, peopleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-listar-contatos',
   templateUrl: './listar-contatos.page.html',
   styleUrls: ['./listar-contatos.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonInput, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonList, IonItem, IonLabel, IonButton, IonInput, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonAvatar, CommonModule, FormsModule]
 })
 export class ListarContatosPage implements OnInit {
   contacts: any[] = [];
   editingId: string | null = null;
   editModel: any = {};
 
-  constructor(private fb: FirebaseService) { }
+  constructor(private fb: FirebaseService) {
+    addIcons({ mailOutline, callOutline, createOutline, trashOutline, checkmarkOutline, closeOutline, personOutline, peopleOutline });
+  }
 
   ngOnInit() {
     this.fb.listContatos().subscribe({
@@ -84,6 +88,35 @@ export class ListarContatosPage implements OnInit {
       await this.fb.deleteContato(id);
     } catch (err) {
       console.error('Erro ao deletar contato', err);
+    }
+  }
+
+  getInitials(name: string): string {
+    if (!name) return '?';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
+  formatPhone(phone: string): string {
+    if (!phone) return '';
+    const digits = phone.toString().replace(/\D/g, '').slice(0, 11);
+    return this.applyPhoneMask(digits);
+  }
+
+  onPhoneInput(ev: any) {
+    const raw = ev?.detail?.value ?? ev?.target?.value ?? '';
+    const digits = (raw + '').replace(/\D/g, '').slice(0, 11);
+    this.editModel.phone = this.applyPhoneMask(digits);
+  }
+
+  onPhoneKeyDown(e: KeyboardEvent) {
+    const allowedKeys = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'];
+    if (allowedKeys.includes(e.key)) return;
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
     }
   }
 

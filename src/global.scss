@@ -35,3 +35,92 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+/**
+ * Custom Styles
+ * -----------------------------------------------------
+ */
+
+// Melhorias nos Tabs
+ion-tab-bar {
+  --background: var(--ion-background-color);
+  --color: var(--ion-color-medium);
+  --color-selected: var(--ion-color-primary);
+  border-top: 1px solid var(--ion-color-light);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+ion-tab-button {
+  --color: var(--ion-color-medium);
+  --color-selected: var(--ion-color-primary);
+  font-weight: 500;
+  
+  &::part(native) {
+    transition: all 0.2s ease;
+  }
+  
+  &:hover {
+    --color: var(--ion-color-primary-shade);
+  }
+}
+
+// Melhorias nos Cards
+ion-card {
+  --background: var(--ion-background-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Melhorias nos Botões
+ion-button {
+  --border-radius: 12px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  
+  &::part(native) {
+    transition: all 0.2s ease;
+  }
+}
+
+// Melhoria no Content
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+// Header mais bonito
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: white;
+    
+    ion-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// Inputs mais bonitos
+ion-input, ion-textarea {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  
+  &::part(native) {
+    border-radius: 8px;
+  }
+}
+
+// Toast customizado
+.custom-toast {
+  --background: var(--ion-color-success);
+  --color: white;
+  --border-radius: 12px;
+  font-weight: 500;
+}
