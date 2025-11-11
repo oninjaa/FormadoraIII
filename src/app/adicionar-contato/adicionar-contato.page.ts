@@ -41,12 +41,22 @@ export class AdicionarContatoPage implements OnInit {
       this.selectedUser = null;
       this.nome = '';
       this.email = '';
+      this.celular = '';
       return;
     }
     const idx = Math.floor(Math.random() * this.apiUsers.length);
     this.selectedUser = this.apiUsers[idx];
     this.nome = this.selectedUser.name || '';
     this.email = this.selectedUser.email || '';
+    
+    // Gerar telefone aleatório com 11 dígitos (formato brasileiro)
+    const ddd = Math.floor(Math.random() * 90) + 11; // DDDs de 11 a 99
+    const nono = 9; // Primeiro dígito é sempre 9 para celular
+    const resto = Math.floor(Math.random() * 100000000).toString().padStart(8, '0'); // 8 dígitos
+    const phoneDigits = `${ddd}${nono}${resto}`;
+    
+    // Aplicar máscara ao telefone
+    this.celular = this.applyPhoneMask(phoneDigits);
   }
 
   onPhoneInput(ev: any) {
